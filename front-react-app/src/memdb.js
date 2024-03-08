@@ -82,7 +82,4 @@ export function validateEmail(email) {
   if(result === true){
     return true;//Proceed further
   }
-  else{
-    alert("Enter correct email address!")
-  }
 }

@@ -12,6 +12,7 @@ function App(props) {
   let blankCustomer = { "id": -1, "name": "", "email": "", "password": "" };
   const [customers, setCustomers] = useState([]);
   const [formObject, setFormObject] = useState(blankCustomer);
+  const [isValidEmail, setIsValidEmail] = useState(true); 
   let mode = (formObject.id >= 0) ? 'Update' : 'Add';
   useEffect(() => { getCustomers() }, [formObject], []);
   // Declare the getCustomers() method.
@@ -34,6 +35,12 @@ function App(props) {
   // Declare the handleInputChange() method.
   const handleInputChange = function (event) {
     const name = event.target.name;
+    console.log(formObject);
+    if (name == 'email' && !validateEmail(formObject.email)) {
+      setIsValidEmail(false);
+    }else{
+      setIsValidEmail(true);
+    }
     const value = event.target.value;
     let newFormObject = {...formObject}
     newFormObject[name] = value;
@@ -49,16 +56,24 @@ function App(props) {
   // Declare the onDeleteClick() method.
 
   let onDeleteClick = function () {
-    if(formObject.id >= 0){
-    // Deleting the selected register from the Customelist
-      deleteById(formObject.id, formObject);
+    if (formObject.name.length === 0 && 
+      formObject.email.length === 0 &&
+      formObject.password.length === 0) {
+      alert('You must select at least one record from the customer list before you try to delete');
     }
-    // Cleaning up the add/edit form
-    setFormObject(blankCustomer);
+    else{
+      if(formObject.id >= 0){
+      // Deleting the selected register from the Customelist
+        deleteById(formObject.id, formObject);
+      }
+      // Cleaning up the add/edit form
+      setFormObject(blankCustomer);
+    }
   }
   
   // Declare the onSaveClick() method.
   let onSaveClick = function () {
+    // Adding the email validation to avoid inserting wrong data.
     if (validateEmail(formObject.email)) {
       // adding the nonempty records validation to avoid 
       // the insertion of the blank record.
@@ -81,6 +96,8 @@ function App(props) {
         // Cleaning up the adding form
         setFormObject(blankCustomer);
       }
+    }else{
+      alert("Enter correct email address!")
     }
     
   }
@@ -96,6 +113,7 @@ function App(props) {
         {/* Render the CustomerAddUpdateForm */}
       <CustomerAddUpdateForm formObject={formObject}
         mode={mode}
+        isValidEmail={isValidEmail}
         handleInputChange={handleInputChange}
         onDeleteClick={onDeleteClick}
         onSaveClick={onSaveClick}

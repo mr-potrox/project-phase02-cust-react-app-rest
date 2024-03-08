@@ -24,7 +24,9 @@ export default function CustomerAddUpdateForm(props){
               name="email"
               onChange={(e) => props.handleInputChange(e)}
               value={props.formObject.email}
-              placeholder="name@company.com" /></td>
+              placeholder="name@company.com" 
+              className={`input-email ${ !props.isValidEmail ? "wrong-email" : ""}`}
+              /></td>
           </tr>
           <tr>
             <td className={'label'} >Pass:</td>
@@ -33,6 +35,7 @@ export default function CustomerAddUpdateForm(props){
               name="password"
               onChange={(e) => props.handleInputChange(e)}
               value={props.formObject.password}
+              className={'password-field-hide'}
               placeholder="password" /></td>
           </tr>
           <tr className="button-bar">
