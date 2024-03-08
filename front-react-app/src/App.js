@@ -12,7 +12,7 @@ function App(props) {
   let blankCustomer = { "id": -1, "name": "", "email": "", "password": "" };
   const [customers, setCustomers] = useState([]);
   const [formObject, setFormObject] = useState(blankCustomer);
-  const [isValidEmail, setIsValidEmail] = useState(true); 
+  const [isValidEmail, setIsValidEmail] = useState(true);
   let mode = (formObject.id >= 0) ? 'Update' : 'Add';
   useEffect(() => { getCustomers() }, [formObject], []);
   // Declare the getCustomers() method.
@@ -35,7 +35,6 @@ function App(props) {
   // Declare the handleInputChange() method.
   const handleInputChange = function (event) {
     const name = event.target.name;
-    console.log(formObject);
     if (name == 'email' && !validateEmail(formObject.email)) {
       setIsValidEmail(false);
     }else{
@@ -73,34 +72,35 @@ function App(props) {
   
   // Declare the onSaveClick() method.
   let onSaveClick = function () {
-    // Adding the email validation to avoid inserting wrong data.
-    if (validateEmail(formObject.email)) {
-      // adding the nonempty records validation to avoid 
-      // the insertion of the blank record.
-      if (formObject.name.length === 0 && 
-        formObject.email.length === 0 &&
-        formObject.password.length === 0) {
-        alert('You must fill at least one field before you save the form');
-      }
-      else{
-        // Adding the new record send it by the user
-        if (mode === 'Add') {
-          // Adding the new register.
-          let nextid = customers.length;
-          post(formObject, nextid);
-        }
-        if (mode === 'Update') {
-          // Saving the new data for the register that is being updated
-          put(formObject.id, formObject);
-        }
-        // Cleaning up the adding form
-        setFormObject(blankCustomer);
-      }
-    }else{
-      alert("Enter correct email address!")
-    }
     
+  // adding the nonempty records validation to avoid 
+  // the insertion of the blank record.
+  if (formObject.name.length === 0 && 
+    formObject.email.length === 0 &&
+    formObject.password.length === 0) {
+    alert('You must fill at least one field before you save the form');
   }
+  else{
+    // Adding the email validation to avoid inserting wrong data.
+    if (formObject.email.length !== 0 && !validateEmail(formObject.email)) {
+      alert("Enter correct email address!");
+    } 
+    else{
+      // Adding the new record send it by the user
+      if (mode === 'Add') {
+        // Adding the new register.
+        let nextid = customers.length;
+        post(formObject, nextid);
+      }
+      if (mode === 'Update') {
+        // Saving the new data for the register that is being updated
+        put(formObject.id, formObject);
+      }
+      // Cleaning up the adding form
+      setFormObject(blankCustomer);
+    }
+  }
+}
 
 
   return (
